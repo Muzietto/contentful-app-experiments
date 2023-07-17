@@ -13,3 +13,7 @@ import {
 import {
   JValue,
 } from '../json-parser/lib/classes';
+
+import nawRemoteConfig from '../../doc/json-js-samples/NAW-remote-config';
+
+console.log('#######################', nawRemoteConfig);

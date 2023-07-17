@@ -15,6 +15,8 @@ import {
   JValue,
 } from '../json-parser/lib/classes';
 
+import nawRemoteConfig from '../../doc/json-js-samples/NAW-remote-config';
+
 describe('json parsers', () => {
   it('parsers json', () => {
     const run = JNullP.run('null');
@@ -23,3 +25,5 @@ describe('json parsers', () => {
     expect(JNullP.run('nulx').isFailure).to.be.true;
   });
 });
+
+console.log('#######################', nawRemoteConfig);
