@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import {
   JNullP,
   JBoolP,
@@ -17,8 +18,8 @@ import {
 describe('json parsers', () => {
   it('parsers json', () => {
     const run = JNullP.run('null');
-    expect(run.isSuccess).toBe(true);
-    expect(run.value[0].isJNull).toBe(true);
-    expect(JNullP.run('nulx').isFailure).toBe(true);
+    expect(run.isSuccess).to.be.true;
+    expect(run.value[0].isJNull).to.be.true;
+    expect(JNullP.run('nulx').isFailure).to.be.true;
   });
 });

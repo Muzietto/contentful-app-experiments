@@ -7,8 +7,8 @@
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "testjest": "jest",
-    "testjestconfig": "jest --showConfig",
+    "testmocha": "mocha 'src/**/*.spec.js'",
+    "testwatchmocha": "mocha --watch",
     "eject": "react-scripts eject",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
@@ -42,14 +42,17 @@
     "react-dom": "17.0.2",
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
-    "paco-js": "^1.0.2"
+    "paco-js": "^1.0.3"
   },
   "devDependencies": {
     "@contentful/app-scripts": "1.10.2",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
     "cross-env": "7.0.3",
-    "esbuild": "^0.18.10"
+    "esbuild": "^0.18.10",
+    "@babel/register": "^7.9.0",
+    "mocha": "latest",
+    "chai": "latest"
   },
   "homepage": "."
 }

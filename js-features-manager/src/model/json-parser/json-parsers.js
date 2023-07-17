@@ -1,5 +1,6 @@
 
-import {
+import * as parsers from 'paco-js';
+const {
   parser,
   charParser,
   digitParser,
@@ -30,7 +31,7 @@ import {
   betweenParens,
   sepBy1,
   sepBy,
-} from 'paco-js';
+} = parsers;
 import {
   JValue,
   Tuple,
@@ -147,7 +148,7 @@ JArrayP = between(
 const leftCurlyParensP = pchar('{').discardSecond(spacesP);
 const rightCurlyParensP = pchar('}').discardSecond(spacesP);
 const colonP = pchar(':').discardSecond(spacesP);
-const jkeyValueP = JStringPnotStartOfInputP
+const jkeyValueP = JStringP
   .discardSecond(spacesP)
   .discardSecond(colonP)
   .andThen(jValueP)
