@@ -26,7 +26,8 @@ const FeaturesManager = () => {
     dispatch(setLocales(sdk.locales));
   }, [dispatch, sdk]);
 
-  // Fetch circuit/plan entries
+  // NB: circuit/plan entries are fetched inside circuitPlansSlice
+
   useEffect(() => {
     const unsubscribe = sdk.field.onValueChanged((e) => {
       dispatch(setConfigs(e));

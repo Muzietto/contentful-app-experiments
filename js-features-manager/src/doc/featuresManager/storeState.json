@@ -1,0 +1,27 @@
+{
+   "app":{
+      "configs":{
+        "Clean the Fucking Car": [],
+        "Say Monad One More Time": [
+          
+        ]
+      },
+      "defaultLocale":"it-IT",
+      "locales":[
+
+      ]
+   },
+   "features":{
+      "enabledEditFeature":false,
+      "search":""
+   },
+   "circuitPlans":{
+      "ids":[
+
+      ],
+      "entities":{
+
+      },
+      "loading":false
+   }
+}

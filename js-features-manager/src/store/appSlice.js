@@ -28,9 +28,9 @@ export default appSlice.reducer;
 
 export const { setLocales, setConfigs } = appSlice.actions;
 
-export const selectFilteredConfigs = createSelector(
-  (state) => state.app.configs || {},
-  (state) => state.features.search,
+const selectFilteredConfigs = createSelector(
+  state => state.app.configs || {},
+  state => state.features.search,
   (configs, search) => {
     const regexp = new RegExp(search, 'gi');
 
@@ -43,3 +43,5 @@ export const selectFilteredConfigs = createSelector(
       : configs;
   }
 );
+// debugger;
+export {selectFilteredConfigs};

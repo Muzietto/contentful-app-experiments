@@ -5,13 +5,15 @@ import appReducer from './appSlice';
 import circuitPlansReducer from './circuitPlansSlice';
 import featuresReducer from './featuresSlice';
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     app: appReducer,
     features: featuresReducer,
     circuitPlans: circuitPlansReducer,
   },
 });
+// debugger;
+export { store };
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 // export type RootState = ReturnType<typeof store.getState>;

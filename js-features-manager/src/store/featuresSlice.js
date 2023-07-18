@@ -9,14 +9,17 @@ const featuresSlice = createSlice({
   name: 'features',
   initialState,
   reducers: {
-    setEnabledEditFeature(state, action) {
+    setEnabledEditFeature: (state, action) => {
       state.enabledEditFeature = action.payload;
     },
-    setSearch(state, action) {
+    setSearch: (state, action) => {
       state.search = action.payload;
     },
   },
 });
 
 export default featuresSlice.reducer;
-export const { setEnabledEditFeature, setSearch } = featuresSlice.actions;
+export const {
+  setEnabledEditFeature,
+  setSearch
+} = featuresSlice.actions;

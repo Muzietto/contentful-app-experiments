@@ -1,0 +1,7 @@
+{
+  "@@observable": "()",
+  "dispatch": "(action)",
+  "getState": "()",
+  "replaceReducer": "(nextReducer)",
+  "subscribe": "(listener)"
+}

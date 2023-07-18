@@ -8,7 +8,7 @@ export const fetchCircuitPlans = createAsyncThunk(
     const {
       app: { defaultLocale },
     } = getState();
-    const circuitPlanCollection = await cma.entry.getMany({
+    const circuitPlanCollection = await cma.entry.getMany({ // THIS IS IT !!!
       query: { content_type: 'circuitPlan' },
     });
     return circuitPlanCollection.items.map((item) => delocalizeEntry(item, defaultLocale));
@@ -27,7 +27,7 @@ const circuitPlansSlice = createSlice({
       state.selectedId = action.payload;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
       .addCase(fetchCircuitPlans.pending, (state, action) => {
         state.loading = true;
@@ -48,8 +48,8 @@ export const circuitPlansSelectors = circuitPlansAdapter.getSelectors(
 );
 
 export const selectedCircuitPlanSelectors = createSelector(
-  (state) => state.circuitPlans.selectedId,
-  (state) => state.circuitPlans.entities,
+  state => state.circuitPlans.selectedId,
+  state => state.circuitPlans.entities,
   (selectedId, entities) => {
     if (!selectedId || !entities || Object.keys(entities).length === 0) {
       return undefined;
