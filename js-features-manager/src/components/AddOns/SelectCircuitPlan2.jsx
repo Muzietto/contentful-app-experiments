@@ -4,33 +4,59 @@ import { useCMA } from '@contentful/react-apps-toolkit';
 import React, { useEffect, useMemo, useState } from 'react';
 
 // AAA - next ones are coming straight from redux !!!
-// import { useAppDispatch, useAppSelector } from '../store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../store';
 import {
   circuitPlanSelected,
   circuitPlansSelectors,
   fetchCircuitPlans,
-} from '../store/circuitPlansSlice';
-import { getCircuitPlan } from '../utils/getCircuitPlan';
-import CircuitPlanWithStatusDot from './CircuitPlanWithStatusDot';
-import MatchedText from './MatchedText';
-import SearchInput from './SearchInput';
-import TextLoader from './TextLoader';
+} from '../../store/circuitPlansSlice';
+import { getCircuitPlan } from '../../utils/getCircuitPlan';
+import CircuitPlanWithStatusDot2 from './CircuitPlanWithStatusDot2';
+import MatchedText2 from './MatchedText2';
+import SearchInput2 from './SearchInput2';
+import TextLoader2 from './TextLoader2';
 
-const SelectCircuitPlan = () => {
-  const circuitPlans = useSelector(circuitPlansSelectors.selectAll);
-  const { selectedId, loading } = useSelector((state) => state.circuitPlans);
-  const currentCircuitPlan = useSelector((state) =>
+const SelectCircuitPlan2 = ({
+  circuitPlans = {
+    ids: [],
+    entities: {},
+    loading: false,
+    selectedId: '',
+  },
+  fm2Dispatch,
+}) => {
+  // const circuitPlans = useAppSelector(circuitPlansSelectors.selectAll);
+  // const { selectedId, loading } = useAppSelector((state) => {
+    // return state.circuitPlans;
+  // });
+  const { loading } = circuitPlans;
+
+/*
+  const selectedCircuitPlanZ = useAppSelector((state) => // the chosen in the upper select
     circuitPlansSelectors.selectById(state, selectedId || '')
   );
-  const dispatch = useDispatch();
-  const cma = useCMA();
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
+*/
+
+  // const dispatch = useAppDispatch();
+  // const cma = useCMA();
+  const [open, setOpen] = useState(false); // see Menu component
+  const [circuitNameSearch, setCircuitNameSearch] = useState('');
+
+  const selectedCircuitPlan = function() {
+
+    const arrayOfChosens = Object.values(circuitPlans.entities)
+      .filter(({ sys }) => {
+
+        const outcome = sys.id === circuitPlans.selectedId;
+        return outcome;
+      });
+
+    return arrayOfChosens[0];
+  }();
 
   const menuItems = useMemo(() => {
-    const orderedCircuitPlans = circuitPlans // circuitPlans ordered by circuitId
-      .map(getCircuitPlan)
+    const orderedCircuitPlans = Object.values(circuitPlans.entities) // circuitPlans ordered by circuitId
+      //.map(getCircuitPlan)
       .sort((a, b) =>
         !a.fields.circuitId
           ? 1 // a sorted after b --> return 1
@@ -53,51 +79,60 @@ const SelectCircuitPlan = () => {
       }, {});
     const result = Object.values(itemsMap)
     .filter((item) => item.name.toLowerCase()
-      .match(search.toLowerCase()));
+      .match(circuitNameSearch.toLowerCase()));
       //debugger;
     return result;
-  }, [circuitPlans, search]);
+  }, [circuitPlans, circuitNameSearch]);
 
+/*
   useEffect(() => {
     dispatch(fetchCircuitPlans(cma));
   }, [cma, dispatch]);
+*/
 
-  const handleSelect = (circuitPlan) => {
-    dispatch(circuitPlanSelected(circuitPlan?.sys.id));
+  const handleSelect = circuitPlan => {
+    fm2Dispatch({
+      type: 'SELECT_CIRCUITPLAN',
+      payload: circuitPlan?.sys.id,
+    });
+    // dispatch(circuitPlanSelected(circuitPlan?.sys.id));
     setOpen(false);
   };
 
   const handleResetCircuitPlain = () => {
-    dispatch(circuitPlanSelected(undefined));
+    // dispatch(circuitPlanSelected(undefined));
+    fm2Dispatch({
+      type: 'UNSELECT_CIRCUITPLAN',
+    });
   };
 
   return loading
-  ? <TextLoader message='Loading circuit / plans' />
+  ? <TextLoader2 message='Loading circuit / plans' />
   : <Flex gap='8px' alignItems='center'>
       <Menu isOpen={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
         <Menu.Trigger>
           <Button endIcon={<ChevronDownIcon />}>
-            {currentCircuitPlan?.fields.name || 'Select a Circuit/Plan'}
+            {selectedCircuitPlan?.fields.name || 'Select a Circuit/Plan'}
           </Button>
         </Menu.Trigger>
-        {currentCircuitPlan && (
+        {selectedCircuitPlan && (
           <TextLink variant='secondary' icon={<CloseIcon />} onClick={handleResetCircuitPlain}>
             Clear
           </TextLink>
         )}
         <Menu.List>
           <Menu.ListHeader style={{ paddingLeft: 8, paddingRight: 8, border: 'none' }}>
-            <SearchInput
+            <SearchInput2
               placeholder='Search Circuit/Plan'
-              value={search}
-              onSearch={(term) => setSearch(term)}
+              value={circuitNameSearch}
+              onSearch={(term) => setCircuitNameSearch(term)}
             />
           </Menu.ListHeader>
           {menuItems.map((item, index) => (
             <Menu.Submenu key={index}>
               <Menu.SubmenuTrigger>
                 {item.name ? (
-                  <MatchedText text={item.name} search={search} />
+                  <MatchedText2 text={item.name} search={circuitNameSearch} />
                 ) : (
                   <Text fontColor='gray400' as='i'>
                     empty
@@ -110,9 +145,9 @@ const SelectCircuitPlan = () => {
                     key={`${circuitPlan.fields.name}`}
                     onClick={() => handleSelect(circuitPlan)}
                   >
-                    <CircuitPlanWithStatusDot
+                    <CircuitPlanWithStatusDot2
                       circuitPlan={circuitPlan}
-                      circuitPlans={circuitPlans}
+                      circuitPlans={Object.values(circuitPlans.entities)}
                     />
                   </Menu.Item>
                 ))}
@@ -129,4 +164,4 @@ const SelectCircuitPlan = () => {
     </Flex>;
 };
 
-export default SelectCircuitPlan;
+export default SelectCircuitPlan2;

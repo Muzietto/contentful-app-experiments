@@ -29,21 +29,21 @@ const FeaturesManager = () => {
   // NB: circuit/plan entries are fetched inside circuitPlansSlice
 
   useEffect(() => {
+
+    // places event listener + returns unsubscribe function
     const unsubscribe = sdk.field.onValueChanged((e) => {
       dispatch(setConfigs(e));
     });
 
-    const fieldValue = sdk.field.getValue();
+/*    const fieldValue = sdk.field.getValue();
 
     if (fieldValue) {
       dispatch(setConfigs(fieldValue));
     } else {
       sdk.field.setValue({});
     }
-
-    return () => {
-      unsubscribe();
-    };
+*/
+    return unsubscribe;
   }, [cma, dispatch, sdk]);
 
   return (

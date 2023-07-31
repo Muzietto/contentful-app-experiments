@@ -3,6 +3,7 @@ import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 import { JsonEditor } from '@contentful/field-editor-json';
 
 import FeaturesManager from '../components/FeaturesManager';
+import FeaturesManager2 from '../components/FeaturesManager2';
 
 const Field = () => {
   const sdk = useSDK();
@@ -21,11 +22,13 @@ const Field = () => {
     };
   }, [sdk]);
 
-  return (<>
-    {handler === 'features-manager' ?
-      <FeaturesManager /> :
-      <JsonEditor field={sdk.field} isInitiallyDisabled={false} />}
-  </>);
+  const Editor = {
+    'features-manager': FeaturesManager,
+    'generic-json': FeaturesManager2,
+    'naw-remote-config': () => <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+  }[handler] || (() => null);
+
+  return <Editor />;
 };
 
 export default Field;

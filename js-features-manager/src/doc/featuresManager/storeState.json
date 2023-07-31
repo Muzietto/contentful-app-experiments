@@ -3,12 +3,17 @@
       "configs":{
         "Clean the Fucking Car": [],
         "Say Monad One More Time": [
-          
+          {
+             "idEntry":"2owTwDtKHfZ9h4EjHQLpMt",
+             "circuitId":"C000",
+             "planId":"247"
+          }
         ]
       },
       "defaultLocale":"it-IT",
       "locales":[
-
+        "it-IT",
+        "en-US"
       ]
    },
    "features":{
@@ -17,11 +22,23 @@
    },
    "circuitPlans":{
       "ids":[
-
+        "79pasGyQsbbAp9wVvVxNcs"
       ],
       "entities":{
-
+        "79pasGyQsbbAp9wVvVxNcs":{
+           "metadata":{ "tags":[] },
+           "sys":{},
+           "fields":{
+              "name":"C000-126",
+              "circuitId":"C000",
+              "planId":"126",
+              "uniqueValidation":"ok"
+           }
+        },
+        "39gV0pojX1x2Ll8qt2VFS4":{},
+        "2owTwDtKHfZ9h4EjHQLpMt":{}
       },
-      "loading":false
+      "loading":false,
+      "selectedId": "<entityId/circuitPlanId>"
    }
 }
