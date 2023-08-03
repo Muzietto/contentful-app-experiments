@@ -24,8 +24,9 @@ const Field = () => {
 
   const Editor = {
     'features-manager': FeaturesManager,
-    'generic-json': FeaturesManager2,
-    'naw-remote-config': () => <JsonEditor field={sdk.field} isInitiallyDisabled={false} />
+    'features-manager2': FeaturesManager2,
+    'generic-json': () => <JsonEditor field={sdk.field} isInitiallyDisabled={false} />,
+    'naw-remote-config': () => <JsonEditor field={sdk.field} isInitiallyDisabled={false} />,
   }[handler] || (() => null);
 
   return <Editor />;

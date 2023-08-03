@@ -99,7 +99,7 @@ const FeatureItem2 = ({
     setShowEdit(false);
   };
 
-  const handleConfirm = (value: string) => {
+  const handleConfirm = value => {
     updateConfig(value);
     fm2Dispatch({
       type: 'SET_ENABLEDEDITFEATURE',
@@ -107,19 +107,25 @@ const FeatureItem2 = ({
     });
     //dispatch(setEnabledEditFeature(false));
   };
+// debugger;
 
-  return (
-    <>
-      {showEdit ? (
-        <FeatureNameInput2
-          configs={configs}
-          value={featureKey}
-          showEdit={true}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-        />
-      ) : (
-        <>
+  const theThing = filteredConfigs[featureKey];
+  const switchIsChecked = theThing && theThing
+    .findIndex(({ idEntry }) => {
+      // debugger;
+      return idEntry === circuitPlans.selectedId;
+    } /*|| ''*/) < 0
+
+  return <>
+      {showEdit
+        ? <FeatureNameInput2
+            configs={configs}
+            value={featureKey}
+            showEdit={true}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        : <>
           <Flex
             justifyContent='space-between'
             alignItems='center'
@@ -130,9 +136,9 @@ const FeatureItem2 = ({
               height: 72,
               //padding: '1.5rem 0',
               borderBottom: `1px solid ${tokens.gray300}`,
-            }}
-            onMouseOver={() => setOver(true)}
-            onMouseLeave={() => setOver(false)}
+              }}
+              onMouseOver={() => setOver(true)}
+              onMouseLeave={() => setOver(false)}
           >
             <Subheading marginLeft='spacingXs' marginBottom='none'>
               <MatchedText2
@@ -144,8 +150,10 @@ const FeatureItem2 = ({
 
             <Flex>    <p>check the fucking logic...</p>
 
-              {sdk.user.spaceMembership.admin && !selectedCircuitPlan && !enabledEditFeature && (
-                <Menu>
+              {sdk.user.spaceMembership.admin
+                && !selectedCircuitPlan
+                && !enabledEditFeature
+                && <Menu>
                   <Menu.Trigger>
                     <IconButton icon={<MoreVerticalIcon />} aria-label='feature-menu-icon' />
                   </Menu.Trigger>
@@ -157,20 +165,16 @@ const FeatureItem2 = ({
                       Delete
                     </Menu.Item>
                   </Menu.List>
-                </Menu>
-              )}
-              {selectedCircuitPlan && (
-                <Switch
-                  isChecked={filteredConfigs[featureKey].findIndex(({ idEntry }) => idEntry === circuitPlans.selectedId || '') < 0}
+                </Menu>}
+              {selectedCircuitPlan
+                && <Switch
+                  isChecked={switchIsChecked}
                   onChange={() => updateEntry(featureKey, selectedCircuitPlan)}
-                />
-              )}
+                />}
             </Flex>
           </Flex>
-        </>
-      )}
-    </>
-  );
+        </>}
+    </>;
 };
 
 export default FeatureItem2;

@@ -91,6 +91,11 @@ const FeatureItem = ({ featureKey, index }) => {
     dispatch(setEnabledEditFeature(false));
   };
 
+  // debugger;
+
+  const switchIsChecked = filteredConfigs[featureKey]
+    .findIndex(({ idEntry }) => idEntry === circuitPlans.selectedId || '') < 0
+
   return (
     <>
       {showEdit ? (
@@ -139,7 +144,7 @@ const FeatureItem = ({ featureKey, index }) => {
               )}
               {selectedCircuitPlan && (
                 <Switch
-                  isChecked={filteredConfigs[featureKey].findIndex(({ idEntry }) => idEntry === circuitPlans.selectedId || '') < 0}
+                  isChecked={switchIsChecked}
                   onChange={() => updateEntry(featureKey, selectedCircuitPlan)}
                 />
               )}

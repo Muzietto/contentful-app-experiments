@@ -57,7 +57,7 @@ const FeaturesManager2 = () => {
 
   useEffect(() => {
     const unsubscribe = sdk.field.onValueChanged(e => {
-      debugger;
+      // debugger;
       fm2Dispatch({
         type: 'SET_CONFIGS',
         payload: e,
