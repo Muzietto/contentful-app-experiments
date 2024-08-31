@@ -1,66 +1,21 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+## stateful-sidebar-with-dialog
 
-## Available Scripts
+This app demonstrates how to share a state between two locations, in this case the Sidebar and the Dialog. It could also work between an Entry Editor (or a Field Editor) and a Dialog.
 
-In the project directory, you can run:
+### Cannot truly whare state between Contentful App locations
 
-#### `npm start`
+The first important thing to note is that it is NOT really possible to truly share a React state between two app locations. In a standard React application, this could be achieved by:
+- wrapping both components with a Provider that creates a state + a dispatcher by invoking the useReducer hook
+- retrieving the state and the dispatcher inside both components by invoking the hook created by the Provider
 
-Creates or updates your app definition in Contentful, and runs the app in development mode.
-Open your app to view it in the browser.
+However, Contentful Apps run inside distinct iframes; this means that, in the setup just described, the states and dispatchers created in the two location components would be distinct instances.
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+### The solution involves serializing the Sidebar state and deserializing it inside the Dialog
 
-#### `npm run build`
+Since [sdk.dialogs.openCurrentApp](https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/#open-the-current-app-in-a-dialog) allows only to pass string parameters (this is actually a limitation due to the underlying [postMessage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)), the Sidebar state must be serialized with JSON.stringify().
 
-Builds the app for production to the `build` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The Dialog receives the serialized Sidebar state, istantiates its own state with a useReducer hook and fills it immediately by deserializing the Sidebar state with JSON.parse() inside a useEffect.
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+The Dialog operates then as desired, modifying its state normally through its React dispatcher.
 
-#### `npm run upload`
-
-Uploads the build folder to contentful and creates a bundle that is automatically activated.
-The command guides you through the deployment process and asks for all required arguments.
-Read [here](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/#deploy-with-contentful) for more information about the deployment process.
-
-#### `npm run upload-ci`
-
-Similar to `npm run upload` it will upload your app to contentful and activate it. The only difference is  
-that with this command all required arguments are read from the environment variables, for example when you add
-the upload command to your CI pipeline.
-
-For this command to work, the following environment variables must be set:
-
-- `CONTENTFUL_ORG_ID` - The ID of your organization
-- `CONTENTFUL_APP_DEF_ID` - The ID of the app to which to add the bundle
-- `CONTENTFUL_ACCESS_TOKEN` - A personal [access token](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/personal-access-tokens)
-
-## Libraries to use
-
-To make your app look and feel like Contentful use the following libraries:
-
-- [Forma 36](https://f36.contentful.com/) – Contentful's design system
-- [Contentful Field Editors](https://www.contentful.com/developers/docs/extensibility/field-editors/) – Contentful's field editor React components
-
-## Using the `contentful-management` SDK
-
-In the default create contentful app output, a contentful management client is
-passed into each location. This can be used to interact with Contentful's
-management API. For example
-
-```js
-// Use the client
-cma.locale.getMany({}).then((locales) => console.log(locales));
-```
-
-Visit the [`contentful-management` documentation](https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/#using-the-contentful-management-library)
-to find out more.
-
-## Learn More
-
-[Read more](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/) and check out the video on how to use the CLI.
-
-Create Contentful App uses [Create React App](https://create-react-app.dev/). You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started) and how to further customize your app.
+When the Dialog closes, it passes back a serialized copy of its current state - once more prepared with JSON.stringify() - to the Sidebar; the latter refills again its whole state with JSON.parse().
