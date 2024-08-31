@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import { GlobalStyles } from '@contentful/f36-components';
 import { SDKProvider } from '@contentful/react-apps-toolkit';
-import StateAndDispatchProvider from './components/StateAndDispatch';
+import StateAndDispatchProvider from './model/reducerAndInitialSidebarState';
 
 import LocalhostWarning from './components/LocalhostWarning';
 import App from './App';
@@ -18,9 +18,7 @@ if (process.env.NODE_ENV === 'development' && window.self === window.top) {
   root.render(
     <SDKProvider>
       <GlobalStyles />
-      <StateAndDispatchProvider>
         <App />
-      </StateAndDispatchProvider>
     </SDKProvider>
   );
 }

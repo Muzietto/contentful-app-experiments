@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Paragraph, Button } from '@contentful/f36-components';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
-import { useStateAndDispatch } from '../components/StateAndDispatch';
+import { reducer, initialSidebarState } from '../model/reducerAndInitialSidebarState';
 
 const Sidebar = () => {
   const sdk = useSDK();
-  const [state, dispatch] = useStateAndDispatch();
+  const [state, dispatch] = useReducer(reducer, {}, initialSidebarState);
   /*
      To use the cma, inject it as follows.
      If it is not needed, you can remove the next line.
@@ -31,15 +31,21 @@ const Sidebar = () => {
       });
     }}>SET TIME</Button>
     <Button onClick={async () => {
-      const undefinedReturnValue = await sdk.dialogs.openCurrentApp({
+      const serializedDialogState = await sdk.dialogs.openCurrentApp({
         shouldCloseOnEscapePress: false,
         shouldCloseOnOverlayClick: false,
         title: 'Dialog',
         minHeight: 360,
         parameters: {
-          someParameter,
+          serializedSidebarState: JSON.stringify(state),
         },
       });
+      if (serializedDialogState) {
+        dispatch({
+          type: 'SET_WHOLE_STATE',
+          payload: JSON.parse(serializedDialogState),
+        });
+      }
     }}>OPEN DIALOG</Button>
   </>;
 };
